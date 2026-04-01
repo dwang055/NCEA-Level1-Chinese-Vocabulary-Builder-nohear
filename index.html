@@ -916,19 +916,7 @@ footer {
   margin: 6px 0;
   min-height: 20px;
 }
-.flashcard-hear {
-  background: var(--good15);
-  border: 1px solid var(--good60);
-  border-radius: 999px;
-  padding: 4px 10px;
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: var(--good);
-  cursor: pointer;
-  transition: all .15s;
-  margin-left: 8px;
-  display: inline-block;
-}
+
 .badge {
   display: inline-block;
   padding: 4px 10px;
@@ -951,10 +939,7 @@ footer {
   font-weight: 700 !important;
   margin: 0 4px !important;
 }
-.flashcard-hear:hover {
-  background: var(--good25);
-  border-color: var(--good);
-}
+
 .flashcard-pos {
   display: inline-block;
   background: rgba(122,208,224,.15);
@@ -1031,7 +1016,7 @@ footer {
   <div class="app-header">
     <h1>NCEA Level 1 Chinese Vocabulary Builder</h1>
     <div class="tagline">Master NCEA Level 1 Chinese — Essential words for New Zealand students</div>
-    <div class="book-credit">489 words &middot; 489 sentences &middot; Daniel Wang's NCEA Level 1 Vocabulary Builder</div>
+    <div class="book-credit">489 words &middot; 489 sentences &middot; Daniel Wang's NCEA Level 1 Chinese Vocabulary Builder</div>
     <div class="header-star-row">
       <button class="header-badge" id="starredToggleBtn">⭐ Starred Words (<span id="starredCountHeader">0</span>)</button>
       <button class="header-badge print-btn" id="printBtn" onclick="openPrintModal()">🖨️ Print</button>
@@ -1239,7 +1224,7 @@ footer {
 // ============================================================
 const BOOK_CONFIG = {
   "title": "NCEA Level 1 Chinese Vocabulary Builder",
-  "bookName": "NCEA Level 1 Vocabulary Builder",
+  "bookName": "NCEA Level 1 Chinese Vocabulary Builder",
   "author": "Daniel Wang",
   "year": "2026",
   "tagline": "Master NCEA Level 1 Chinese — Essential words for New Zealand students"
@@ -7120,7 +7105,7 @@ function renderQuestion() {
     quizHintDiv.style.cssText = 'font-size: 0.95rem; color: var(--muted); margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--s20); line-height: 1.5;';
     quizHintDiv.innerHTML = entry.quote_zh || '';
     document.getElementById('quizSentence').parentNode.appendChild(quizHintDiv);
-    document.getElementById('quizSentence').parentNode.appendChild(quizZhDiv);
+    
 
     const group = GROUPS[S.gIdx];
     const distractors = shuffle(group.map(w => w.word).filter(w => w !== entry.word)).slice(0, 3);
@@ -7351,20 +7336,6 @@ document.getElementById('nextGroupBtn').addEventListener('click', () => goGroup(
 document.getElementById('prevWordBtn').addEventListener('click', () => goWord(S.wIdx - 1));
 document.getElementById('nextWordBtn').addEventListener('click', () => goWord(S.wIdx + 1));
 document.getElementById('starBtn').addEventListener('click', toggleStar);
-  
-  const sentenceBtn = document.getElementById('sentenceHearBtn');
-  if (sentenceBtn) {
-    sentenceBtn.addEventListener('click', () => {
-      const sentEn = document.getElementById('sentEn');
-      if (sentEn) {
-        let text = sentEn.textContent;
-        if (text && text !== '—') {
-          text = text.replace(/<[^>]*>/g, '');
-          if (text.trim()) speak(text);
-        }
-      }
-    });
-  }
 document.getElementById('tabNovel').addEventListener('click', () => { S.sentTab = 0; render(); });
 document.getElementById('tabAI').addEventListener('click',   () => { S.sentTab = 1; render(); });
 const tabFlashcard = document.getElementById('tabFlashcard');
@@ -7663,14 +7634,6 @@ function doPrint() {
 
 let flashcardState = { side: 'word', index: 0 };
 
-function speakFlashcard() {
-  const group = GROUPS[S.gIdx];
-  const word = group[flashcardState.index].word;
-  speak(word);
-}
-
-
-
 function toggleFlashcard() {
   const inner = document.getElementById('flashInner');
   const label = document.getElementById('flashLabel');
@@ -7696,7 +7659,7 @@ function toggleFlashcard() {
   } else {
     flashcardState.side = 'word';
     label.textContent = 'Word';
-    content.innerHTML = '<div class="flashcard-word-main">' + entry.word + '</div>' + '<div class="flashcard-pron">[' + (entry.pron || '') + ']</div>' + '<div class="flashcard-pos-display">[' + (entry.part_of_speech || '') + ']</div>' + '<button class="flashcard-hear" onclick="speakFlashcard()" data-word="' + entry.word.replace(/'/g, "\\'") + '">🔊 Hear</button>';
+    content.innerHTML = '<div class="flashcard-word-main">' + entry.word + '</div>' + '<div class="flashcard-pron">[' + (entry.pron || '') + ']</div>' + '<div class="flashcard-pos-display">[' + (entry.part_of_speech || '') + ']</div>';
     content.className = 'flashcard-content';
     inner.style.background = 'linear-gradient(160deg, rgba(14,34,48,.85), rgba(11,27,36,.95))';
   }
@@ -7717,7 +7680,7 @@ function renderFlashcard() {
   const content = document.getElementById('flashContent');
   
   label.textContent = 'Word';
-  content.innerHTML = '<div class="flashcard-word-main">' + entry.word + '</div><div class="flashcard-pron">[' + (entry.pron || '') + ']</div><span class="badge badge-pos">[' + (entry.part_of_speech || '') + ']</span><button class="flashcard-hear" id="flashHearBtn" onclick="speakFlashcard()">🔊 Hear</button>';
+  content.innerHTML = '<div class="flashcard-word-main">' + entry.word + '</div><div class="flashcard-pron">[' + (entry.pron || '') + ']</div><span class="badge badge-pos">[' + (entry.part_of_speech || '') + ']</span>';
   content.className = 'flashcard-content';
   inner.style.background = 'linear-gradient(160deg, rgba(14,34,48,.85), rgba(11,27,36,.95))';
   
